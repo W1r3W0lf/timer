@@ -1,0 +1,27 @@
+For this project I am trying a bunch of new things.
+
+I'm going to be working with GTK+
+And I'm going to try my hand at fixing build portability.
+
+
+Fixing Build portability.
+
+I want to have a way that everyone can build this project the same way.
+One way I have seen to do this in the wild is to have a build envernment in docker, podman, or vagrent.
+These solutions work. But I think that they introduce more complexity then is needed.
+
+Python has some solutions for this already being Venv and Conda.
+
+These tools are grate. No need to spin up a VM that you have to install all of your tools in.
+You can work with your program on your system with everything that it needs.
+
+The Venv/Conda modle is what I want. Guix seems to allow this type of modle for non-python enviernments.
+
+This project will be buildable without the Guix package mannager.
+It is that using the Guix package mannager should make it equivalent to getting a python project off the ground with pip and venv.
+As opposed to trying to compile a C++ program with CMake and looking at the errors for what packages you need to install. 
+
+Another solutions seems to be Build2 for C/C++. But that restricts the projcect to C/C++ and it dosen't have as many packages as Guix does.
+
+
+Potental

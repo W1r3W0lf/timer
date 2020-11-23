@@ -1,0 +1,5 @@
+.ccls-cache
+src/.cache
+src/compile_commands.json
+src/main.o
+src/timer
