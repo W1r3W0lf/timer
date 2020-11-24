@@ -4,6 +4,7 @@
 
 void init_timer(timer *new_timer){
 	sem_init(&new_timer->lock, 0, 1 /*Inital Value*/);
+
 }
 
 void start_timer(timer *this_timer){
