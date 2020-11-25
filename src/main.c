@@ -7,52 +7,59 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+#include "clock.h"
+#include "alarm.h"
+#include "stopWatch.h"
+#include "timer.h"
 
-// Modifyed by more than one function
-GtkLabel *time_label; 
-time_t start_time;
-sem_t time_lock;
+// Data Structures
+enum mode{
+	clock_mode, timer_mode, stopWatch_mode, alarm_mode
+};
 
-// Running signal to update_counter
+// Global Vareables
+enum mode app_mode;
+
+#define max_alarms 10
+#define max_timers 10
+#define max_stopWatches 10
+
+struct alarm alarm_list[max_alarms];
+//struct timer timer_list[max_timers]; // This is broken for some reason
+struct stopWatch stopWatche_list[max_stopWatches];
+
+
+// Running signal to kill timerd when the program closes
 _Atomic(int) running;
-void update_counter();
 
+// Prodotypes
+void timerd();
 
-GtkButton *start_stop; // Only acessed by start_stop_cliekced
-void start_stop_clicked();
+// UI elements
+GtkLabel clock_display;
 
-
+/* on_activate
+ * app The GTK application
+ *
+ * Sets up the initial UI for the program.
+ */
 static void on_activate (GtkApplication *app){
 
 	GtkWidget *window;
-	GtkWidget *grid;
 
 	// Setup the window
 	window = gtk_application_window_new(app);
 	gtk_window_set_title(GTK_WINDOW(window), "Timer");
-
-	// Add the grid to the window
-	grid = gtk_grid_new();
-	gtk_container_add(GTK_CONTAINER(window), grid);
-
-	// Start/Stop button
-	start_stop = GTK_BUTTON(gtk_button_new_with_label("Start"));
-	g_signal_connect(start_stop, "clicked", G_CALLBACK(start_stop_clicked), NULL);
-	gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(start_stop), 0,1,1,1); // Add the button to the grid
-
-	// Timer Label
-	time_label = GTK_LABEL(gtk_label_new("00:00"));
-	gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(time_label), 0,0,2,1); // Add the label to the grid
 
 	gtk_widget_show_all(window);
 }
 
 int main(int argc, char** argv){
 
-	sem_init(&time_lock, 0, 1 /*Inital Value*/);
-	start_time = 0;
 	running = 1;
 	int status;
+
+	app_mode = clock_mode;
 
 	GtkApplication *app = gtk_application_new("com.michaeljury.timer", G_APPLICATION_FLAGS_NONE);
 
@@ -64,31 +71,32 @@ int main(int argc, char** argv){
 	return status;
 }
 
-void update_counter(){
+/* timerd
+ *
+ * Updates the clock/timer/stopwatch values
+ * Keeps track of when the alarms should go off.
+ */
+void timerd(){
 
 	while(running){
 
-		sem_wait(&time_lock); // Lock 
+		switch(app_mode){
 
-		time_t start = start_time;
+			case clock_mode:
+				//update_clock(clock_display);
+				break;
 
-		sem_post(&time_lock); // Unlock
+			case alarm_mode:
 
-		if(! start){
-			// See start_stop_clicked first comment.
+				break;
 
-			time_t now;
-			time(&now);
+			case timer_mode:
 
-			// Old hold overs from the last timer program
-			time_t diffTime = difftime(now, start_time);
-			printf("%ld\n", diffTime);
-			char timeString[64];
-			//sprintf(timeString ,"%ld", diffTime);
-			struct tm *localnow = localtime(&diffTime);
-			strftime(timeString, 64, "%M:%S", localnow);
-			gtk_label_set_text(time_label, timeString);
+				break;
 
+			case stopWatch_mode:
+
+				break;
 		}
 
 		sleep(1);
@@ -96,27 +104,10 @@ void update_counter(){
 
 }
 
-void start_stop_clicked(){
-
-	sem_wait(&time_lock); // Lock 
-	/* I could lock the thread when the timer is stopped.
-	 * And that is how I keep the timer from progressing.
-	 *
-	 * It's a bit scetch so I'm going to do it after I get this working.
-	 */
-
-	if(!start_time){ // If the timer has not been started then Start it.
-		time(&start_time);
-		printf("%ld\n",start_time);
-		gtk_button_set_label(start_stop, "Stop");
-
-	}else{ // If the timer has been started then stop it.
-		start_time = 0;
-		gtk_button_set_label(start_stop, "Start");
-	}
-	sem_post(&time_lock); // Unlock
-}
-
+/* exit_timer
+ *
+ * Saves the active state and exits the program.
+ */ 
 void exit_timer(){
 	printf("save_file\n");
 	running = 0; // Kill update thread

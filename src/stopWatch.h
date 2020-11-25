@@ -4,17 +4,21 @@
 #include <time.h>
 #include <semaphore.h>
 
-typedef struct {
+struct stopWatch{
 	time_t start_time;
 	time_t end_time;
 	sem_t lock; // I don't think I want a lock. 
-}timer;
+};
 
-void init_timer(timer *new_timer);
-void start_timer(timer *this_timer);
-void pause_timer(timer *this_timer);
-void save_timer(timer *this_timer);
+void load_timers(char *save_file);
 
+void save_timers(char *save_file);
+
+void init_timer(struct stopWatch *new_timer);
+
+void start_timer(struct stopWatch *this_timer);
+
+void pause_timer(struct stopWatch *this_timer);
 
 
 #endif

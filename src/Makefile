@@ -23,7 +23,7 @@ CFLAGS=-Wall -g  $(GTKLIB) -rdynamic
 LIBS=
 
 DEPS=
-OBJ=main.o timer.o
+OBJ=main.o timer.o alarm.o clock.o stopWatch.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) 
