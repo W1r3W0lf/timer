@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h> // Used only for sleep
 #include <gtk/gtk.h>
+#include <glib.h>
 
 // Threading for time updating
 #include <pthread.h>
@@ -36,7 +37,14 @@ _Atomic(int) running;
 void timerd();
 
 // UI elements
-GtkLabel clock_display;
+
+GtkLabel *clock_display_label;
+
+GtkWidget *timer_display;
+
+GtkWidget *alarm_display;
+
+GtkWidget *stopWatch_display;
 
 /* on_activate
  * app The GTK application
@@ -45,13 +53,50 @@ GtkLabel clock_display;
  */
 static void on_activate (GtkApplication *app){
 
-	GtkWidget *window;
+	GtkWindow *window;
+	GtkNotebook *notebook;
+	GtkLabel *label;
+	GtkLabel *label2;
 
 	// Setup the window
-	window = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(window), "Timer");
+	window = GTK_WINDOW(gtk_application_window_new(app));
+	gtk_window_set_title(window, "Timer");
+	gtk_window_set_default_size(window, 200, 200);
 
-	gtk_widget_show_all(window);
+	notebook = GTK_NOTEBOOK(gtk_notebook_new());
+
+	// Setup the Clock UI
+	{
+		PangoAttribute *fontSize;
+		PangoAttrList *pangoList;
+
+		label = GTK_LABEL(gtk_label_new("Clock"));
+		clock_display_label = GTK_LABEL(gtk_label_new("00:00:00"));
+		//fontSize = pango_attr_size_new(1);
+		//pangoList = pango_attr_list_new();
+		//pango_attr_list_insert(pangoList, fontSize);
+		//gtk_label_set_attributes(clock_display_label, pangoList);
+		gtk_notebook_append_page(notebook,GTK_WIDGET(clock_display_label) , GTK_WIDGET(label));
+	}
+
+	// Setup the Timer UI
+	label = GTK_LABEL(gtk_label_new("Timer"));
+	label2 = GTK_LABEL(gtk_label_new("Test2"));
+	gtk_notebook_append_page(notebook,GTK_WIDGET(label2) , GTK_WIDGET(label));
+
+	// Setup the Stop Watch UI
+	label = GTK_LABEL(gtk_label_new("Stop Watch"));
+	label2 = GTK_LABEL(gtk_label_new("Test3"));
+	gtk_notebook_append_page(notebook,GTK_WIDGET(label2) , GTK_WIDGET(label));
+
+	// Setup the Alarm UI
+	label = GTK_LABEL(gtk_label_new("Alarm"));
+	label2 = GTK_LABEL(gtk_label_new("Test4"));
+	gtk_notebook_append_page(notebook,GTK_WIDGET(label2) , GTK_WIDGET(label));
+
+	gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(notebook));
+
+	gtk_widget_show_all(GTK_WIDGET(window));
 }
 
 int main(int argc, char** argv){
