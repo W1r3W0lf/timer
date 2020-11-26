@@ -6,7 +6,9 @@
 
 
 void start_timer(struct timer *this_timer){
-
+	time_t now;
+	time(&now);
+	this_timer->start_time = now;
 }
 
 void pause_timer(struct timer *this_timer){
@@ -14,7 +16,8 @@ void pause_timer(struct timer *this_timer){
 }
 
 void reset_timer(struct timer *this_timer){
-
+	this_timer->start_time = 0;
+	this_timer->end_time = 0;
 }
 
 void save_timer(struct timer *this_timer){
@@ -24,8 +27,8 @@ void save_timer(struct timer *this_timer){
 
 void init_timer_list(struct timer_list *new_timer_list){
 	new_timer_list->timers = malloc(sizeof(struct timer) * timer_list_starting_count);
-	new_timer_list->max_timer_count = timer_list_starting_count;
-	new_timer_list->timer_count = 0;
+	new_timer_list->max_count = timer_list_starting_count;
+	new_timer_list->count = 0;
 }
 
 

@@ -24,8 +24,8 @@ void save_timer(struct timer *this_timer);
 struct timer_list{
 	struct timer *timers;
 	GtkWidget *timer_list_box;
-	int timer_count;
-	int max_timer_count;
+	int count;
+	int max_count;
 };
 
 void init_timer_list(struct timer_list *new_timer_list);
