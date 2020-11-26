@@ -5,6 +5,8 @@
 #include <gtk/gtk.h>
 //#include <semaphore.h>
 
+#define i_am_here 100
+
 struct timer{
 	time_t start_time;
 	time_t end_time;

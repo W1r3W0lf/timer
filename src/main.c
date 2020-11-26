@@ -158,7 +158,6 @@ void* timerd(){
  * Saves the active state and exits the program.
  */ 
 void exit_timer(){
-	printf("save_file\n");
 	running = 0; // Kill update thread
 	gtk_main_quit();
 }
