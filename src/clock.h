@@ -6,6 +6,6 @@
  * The Clock should be stateless and just display the time on the screen.
  */ 
 
-void update_clock(GtkLabel clock);
+void update_clock(GtkLabel *clock);
 
 #endif

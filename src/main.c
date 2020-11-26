@@ -34,7 +34,8 @@ struct stopWatch stopWatche_list[max_stopWatches];
 _Atomic(int) running;
 
 // Prodotypes
-void timerd();
+void* timerd();
+pthread_t timerd_proc;
 
 // UI elements
 
@@ -67,14 +68,14 @@ static void on_activate (GtkApplication *app){
 
 	// Setup the Clock UI
 	{
-		PangoAttribute *fontSize;
-		PangoAttrList *pangoList;
-
-		label = GTK_LABEL(gtk_label_new("Clock"));
-		clock_display_label = GTK_LABEL(gtk_label_new("00:00:00"));
+		//PangoAttribute *fontSize; // Trying to change the font size
+		//PangoAttrList *pangoList;
 		//fontSize = pango_attr_size_new(1);
 		//pangoList = pango_attr_list_new();
 		//pango_attr_list_insert(pangoList, fontSize);
+
+		label = GTK_LABEL(gtk_label_new("Clock"));
+		clock_display_label = GTK_LABEL(gtk_label_new("00:00:00"));
 		//gtk_label_set_attributes(clock_display_label, pangoList);
 		gtk_notebook_append_page(notebook,GTK_WIDGET(clock_display_label) , GTK_WIDGET(label));
 	}
@@ -101,6 +102,7 @@ static void on_activate (GtkApplication *app){
 
 int main(int argc, char** argv){
 
+	pthread_create(&timerd_proc, NULL, timerd, NULL);
 	running = 1;
 	int status;
 
@@ -121,14 +123,14 @@ int main(int argc, char** argv){
  * Updates the clock/timer/stopwatch values
  * Keeps track of when the alarms should go off.
  */
-void timerd(){
+void* timerd(){
 
 	while(running){
 
 		switch(app_mode){
 
 			case clock_mode:
-				//update_clock(clock_display);
+				update_clock(clock_display_label);
 				break;
 
 			case alarm_mode:
