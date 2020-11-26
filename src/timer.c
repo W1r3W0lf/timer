@@ -1,5 +1,6 @@
 #include "timer.h"
 #include <time.h>
+#include <gtk/gtk.h>
 #include <semaphore.h>
 
 void init_timer(struct timer *new_timer){
@@ -18,3 +19,13 @@ void pause_timer(struct timer *this_timer){
 void save_timer(struct timer *this_timer){
 
 }
+
+GtkWidget* timer_ui(){
+	GtkWidget* listBox;
+
+	listBox = gtk_list_box_new();
+
+
+	return listBox;
+}
+
