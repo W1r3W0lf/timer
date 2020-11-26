@@ -1,5 +1,5 @@
 #include <time.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <unistd.h> // Used only for sleep
 #include <gtk/gtk.h>
 //#include <glib.h>
@@ -15,7 +15,7 @@
 
 // Data Structures
 enum mode{
-	clock_mode, timer_mode, stopWatch_mode, alarm_mode
+	clock_mode, timer_mode, stop_watch_mode, alarm_mode
 };
 
 // Global Vareables
@@ -23,12 +23,20 @@ enum mode app_mode;
 
 #define max_alarms 10
 #define max_timers 10
-#define max_stopWatches 10
+#define max_stop_watches 10
 
+GtkLabel *clock_display_label;
+
+// Each one of these should be made into there own list data structure
+
+GtkWidget *timer_list_box;
+struct timer timer_list[max_timers];
+
+GtkWidget *stop_watch_display;
+struct stop_watch stop_watch_list[max_stop_watches];
+
+GtkWidget *alarm_display;
 struct alarm alarm_list[max_alarms];
-struct timer timer_list[max_timers]; // This is broken for some reason
-struct stopWatch stopWatch_list[max_stopWatches];
-
 
 // Running signal to kill timerd when the program closes
 _Atomic(int) running;
@@ -36,16 +44,6 @@ _Atomic(int) running;
 // Prodotypes
 void* timerd();
 pthread_t timerd_proc;
-
-// UI elements
-
-GtkLabel *clock_display_label;
-
-GtkWidget *timer_display;
-
-GtkWidget *alarm_display;
-
-GtkWidget *stopWatch_display;
 
 /* on_activate
  * app The GTK application
@@ -58,7 +56,6 @@ static void on_activate (GtkApplication *app){
 	GtkNotebook *notebook;
 	GtkLabel *label;
 	GtkLabel *label2;
-	GtkWidget *sectionUI;
 
 	// Setup the window
 	window = GTK_WINDOW(gtk_application_window_new(app));
@@ -68,21 +65,16 @@ static void on_activate (GtkApplication *app){
 	notebook = GTK_NOTEBOOK(gtk_notebook_new());
 
 	// Setup the Clock UI
-	//PangoAttribute *fontSize; // Trying to change the font size
-	//PangoAttrList *pangoList;
-	//fontSize = pango_attr_size_new(1);
-	//pangoList = pango_attr_list_new();
-	//pango_attr_list_insert(pangoList, fontSize);
 
 	label = GTK_LABEL(gtk_label_new("Clock"));
-	clock_display_label = GTK_LABEL(gtk_label_new("00:00:00"));
-	//gtk_label_set_attributes(clock_display_label, pangoList);
+	clock_display_label = clock_ui(clock_display_label);
 	gtk_notebook_append_page(notebook,GTK_WIDGET(clock_display_label) , GTK_WIDGET(label));
 
 	// Setup the Timer UI
+	init_timer(&timer_list[0]); //Setup one timer so that it will work
 	label = GTK_LABEL(gtk_label_new("Timer"));
-	sectionUI = GTK_WIDGET(timer_ui()); // Something is Wrong
-	gtk_notebook_append_page(notebook, sectionUI, GTK_WIDGET(label));
+	timer_list_box = timer_ui(timer_list[0].timer_display);
+	gtk_notebook_append_page(notebook, timer_list_box, GTK_WIDGET(label));
 
 	// Setup the Stop Watch UI
 	label = GTK_LABEL(gtk_label_new("Stop Watch"));
@@ -142,7 +134,7 @@ void* timerd(){
 
 				break;
 
-			case stopWatch_mode:
+			case stop_watch_mode:
 
 				break;
 		}

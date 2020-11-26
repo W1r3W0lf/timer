@@ -8,4 +8,6 @@
 
 void update_clock(GtkLabel *clock);
 
+GtkLabel* clock_ui(GtkLabel *clock_display);
+
 #endif

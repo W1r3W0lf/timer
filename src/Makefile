@@ -11,7 +11,7 @@ GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 GTKMM=`pkg-config --cflags --libs gtkmm-3.0`
 
 
-CFLAGS=-Wall -g  $(GTKLIB) -rdynamic
+CFLAGS=-Wall -g  $(GTKLIB) #-rdynamic
 
 LIBS=
 
