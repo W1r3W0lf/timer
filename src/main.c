@@ -21,9 +21,6 @@ enum mode{
 // Global Vareables
 enum mode app_mode;
 
-#define max_alarms 10
-#define max_timers 10
-#define max_stop_watches 10
 
 GtkLabel *clock_display_label;
 

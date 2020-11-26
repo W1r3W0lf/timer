@@ -1,26 +1,33 @@
 #include "timer.h"
 #include <time.h>
 #include <gtk/gtk.h>
-#include <semaphore.h>
+//#include <semaphore.h>
+#include <stdlib.h>
 
-void init_timer(struct timer *new_timer){
-	new_timer->start_time = 0;
-	new_timer->end_time = 0;
-}
 
 void start_timer(struct timer *this_timer){
-	time(&this_timer->start_time); // Set start to current time.
 
 }
 
 void pause_timer(struct timer *this_timer){
-	time(&this_timer->end_time); // Set end to current time.
+
+}
+
+void reset_timer(struct timer *this_timer){
 
 }
 
 void save_timer(struct timer *this_timer){
 
 }
+
+
+void init_timer_list(struct timer_list *new_timer_list){
+	new_timer_list->timers = malloc(sizeof(struct timer) * timer_list_starting_count);
+	new_timer_list->max_timer_count = timer_list_starting_count;
+	new_timer_list->timer_count = 0;
+}
+
 
 GtkWidget* timer_ui(GtkWidget *timer_display){
 	GtkWidget* listBox; // I am going to need to keep this to add more timers to it.
