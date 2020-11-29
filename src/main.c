@@ -59,7 +59,6 @@ static void on_activate (GtkApplication *app){
 	notebook = GTK_NOTEBOOK(gtk_notebook_new());
 
 	// Setup the Clock UI
-
 	label = GTK_LABEL(gtk_label_new("Clock"));
 	my_clock = clock_ui(my_clock);
 	gtk_notebook_append_page(notebook,GTK_WIDGET(my_clock) , GTK_WIDGET(label));
@@ -71,8 +70,8 @@ static void on_activate (GtkApplication *app){
 
 	// Setup the Stop Watch UI
 	label = GTK_LABEL(gtk_label_new("Stop Watch"));
-	label2 = GTK_LABEL(gtk_label_new("Test3"));
-	gtk_notebook_append_page(notebook,GTK_WIDGET(label2) , GTK_WIDGET(label));
+	section_ui = stop_watch_ui(my_stop_watch_list);
+	gtk_notebook_append_page(notebook,GTK_WIDGET(section_ui) , GTK_WIDGET(label));
 
 	// Setup the Alarm UI
 	label = GTK_LABEL(gtk_label_new("Alarm"));
@@ -112,6 +111,7 @@ int main(int argc, char** argv){
 void* timerd(){
 
 	while(running){
+		sleep(1);
 
 		switch(app_mode){
 
@@ -132,7 +132,6 @@ void* timerd(){
 				break;
 		}
 
-		sleep(1);
 	}
 
 	return NULL;
