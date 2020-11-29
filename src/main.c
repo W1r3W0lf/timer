@@ -21,10 +21,9 @@ enum mode{
 // Global Vareables
 enum mode app_mode;
 
-
-GtkLabel *clock_display_label;
-
 // Each one of these should be made into there own list data structure
+
+GtkWidget *my_clock;
 
 struct timer_list my_timer_list;
 
@@ -62,8 +61,8 @@ static void on_activate (GtkApplication *app){
 	// Setup the Clock UI
 
 	label = GTK_LABEL(gtk_label_new("Clock"));
-	clock_display_label = clock_ui(clock_display_label);
-	gtk_notebook_append_page(notebook,GTK_WIDGET(clock_display_label) , GTK_WIDGET(label));
+	my_clock = clock_ui(my_clock);
+	gtk_notebook_append_page(notebook,GTK_WIDGET(my_clock) , GTK_WIDGET(label));
 
 	// Setup the Timer UI
 	label = GTK_LABEL(gtk_label_new("Timer"));
@@ -117,7 +116,7 @@ void* timerd(){
 		switch(app_mode){
 
 			case clock_mode:
-				update_clock(clock_display_label);
+				update_clock(my_clock);
 				break;
 
 			case alarm_mode:

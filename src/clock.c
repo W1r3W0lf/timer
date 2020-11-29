@@ -2,8 +2,9 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <time.h>
+#include <assert.h>
 
-void update_clock(GtkLabel *clock){
+void update_clock(GtkWidget *this_clock){
 
 	GDateTime *now;
 	gchar *nowStr;
@@ -11,11 +12,11 @@ void update_clock(GtkLabel *clock){
 	now = g_date_time_new_now_local();
 	nowStr = g_date_time_format(now, "%H:%M:%S");
 
-	gtk_label_set_text(clock, nowStr);
+	gtk_label_set_text(GTK_LABEL(this_clock), nowStr);
 }
 
 
-GtkLabel* clock_ui(GtkLabel *clock_display){
+GtkWidget* clock_ui(GtkWidget *this_clock){
 
 	//PangoAttribute *fontSize; // Trying to change the font size
 	//PangoAttrList *pangoList;
@@ -25,7 +26,8 @@ GtkLabel* clock_ui(GtkLabel *clock_display){
 	//
 	//
 	//gtk_label_set_attributes(clock_display_label, pangoList);
-	GTK_LABEL(gtk_label_new("00:00:00"));
 	
-	return clock_display;
+	this_clock = gtk_label_new("00:00:00");
+	
+	return this_clock;
 }

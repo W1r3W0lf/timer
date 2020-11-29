@@ -6,8 +6,8 @@
  * The Clock should be stateless and just display the time on the screen.
  */ 
 
-void update_clock(GtkLabel *clock);
+void update_clock(GtkWidget *this_clock);
 
-GtkLabel* clock_ui(GtkLabel *clock_display);
+GtkWidget* clock_ui(GtkWidget *this_clock);
 
 #endif
