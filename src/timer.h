@@ -39,7 +39,7 @@ void add_timer(struct timer_list *this_timer_list);
 void remove_timer(struct timer_list *this_timer_list, int timer_number);
 
 
-GtkWidget* timer_ui(GtkWidget *timer_display);
+GtkWidget* timer_ui();
 
 
 #endif

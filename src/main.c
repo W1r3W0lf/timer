@@ -26,14 +26,11 @@ GtkLabel *clock_display_label;
 
 // Each one of these should be made into there own list data structure
 
-GtkWidget *timer_list_box;
-struct timer timer_list[max_timers];
+struct timer_list my_timer_list;
 
-GtkWidget *stop_watch_display;
-struct stop_watch stop_watch_list[max_stop_watches];
+struct stop_watch_list my_stop_watch_list;
 
-GtkWidget *alarm_display;
-struct alarm alarm_list[max_alarms];
+struct alarm_list my_alarm_list;
 
 // Running signal to kill timerd when the program closes
 _Atomic(int) running;
@@ -53,6 +50,7 @@ static void on_activate (GtkApplication *app){
 	GtkNotebook *notebook;
 	GtkLabel *label;
 	GtkLabel *label2;
+	GtkWidget *section_ui;
 
 	// Setup the window
 	window = GTK_WINDOW(gtk_application_window_new(app));
@@ -68,10 +66,9 @@ static void on_activate (GtkApplication *app){
 	gtk_notebook_append_page(notebook,GTK_WIDGET(clock_display_label) , GTK_WIDGET(label));
 
 	// Setup the Timer UI
-	init_timer(&timer_list[0]); //Setup one timer so that it will work
 	label = GTK_LABEL(gtk_label_new("Timer"));
-	timer_list_box = timer_ui(timer_list[0].timer_display);
-	gtk_notebook_append_page(notebook, timer_list_box, GTK_WIDGET(label));
+	section_ui = timer_ui();
+	gtk_notebook_append_page(notebook, section_ui, GTK_WIDGET(label));
 
 	// Setup the Stop Watch UI
 	label = GTK_LABEL(gtk_label_new("Stop Watch"));

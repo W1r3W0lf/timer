@@ -6,9 +6,17 @@
  */ 
 
 #include <time.h>
+#include <gtk/gtk.h>
 
 struct alarm{
 	time_t finish_time;
+};
+
+struct alarm_list{
+	struct alarm *alarms;
+	GtkWidget *list_display;
+	int count;
+	int max_count;
 };
 
 void load_alarms(char* save_file, struct alarm *alarms, int max_alarms);
