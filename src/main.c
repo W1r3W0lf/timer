@@ -70,7 +70,7 @@ static void on_activate (GtkApplication *app){
 
 	// Setup the Stop Watch UI
 	label = GTK_LABEL(gtk_label_new("Stop Watch"));
-	section_ui = stop_watch_ui(my_stop_watch_list);
+	section_ui = stop_watch_ui(&my_stop_watch_list);
 	gtk_notebook_append_page(notebook,GTK_WIDGET(section_ui) , GTK_WIDGET(label));
 
 	// Setup the Alarm UI
@@ -84,6 +84,10 @@ static void on_activate (GtkApplication *app){
 }
 
 int main(int argc, char** argv){
+
+	// Setup Shared data structures
+	init_stop_watch_list(&my_stop_watch_list);
+	
 
 	// Start timerd running in the backgound
 	pthread_create(&timerd_proc, NULL, timerd, NULL);
